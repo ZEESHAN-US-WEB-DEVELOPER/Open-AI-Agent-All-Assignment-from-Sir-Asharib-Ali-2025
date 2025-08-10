@@ -1,5 +1,5 @@
 from dotenv import load_dotenv
-load_dotenv()  # Load .env file
+load_dotenv()  
 
 from agents import Agent, Runner, AsyncOpenAI, OpenAIChatCompletionsModel, RunConfig, function_tool, RunContextWrapper
 import os
@@ -16,8 +16,8 @@ config = RunConfig(model=model, model_provider=client, tracing_disabled=True)
 class Account(BaseModel):
     name: str
     pin: int
-    account_number: str = "123456789"  # Default account number
-    authenticated: bool = False  # Tracks authentication status
+    account_number: str = "123456789" 
+    authenticated: bool = False  
 
 # Input guardrail: Validate banking-related query
 def is_banking_query(query: str) -> bool:
@@ -31,7 +31,7 @@ def format_response(response: str, authenticated: bool) -> str:
     return f"Bank Response: {response}. How can we assist you further?"
 
 # Tool 1: Authentication
-@function_tool(is_enabled=lambda ctx, agent: True)  # Always enabled
+@function_tool(is_enabled=lambda ctx, agent: True)
 def authenticate(ctx: RunContextWrapper[Account]) -> str:
     if ctx.context.name == "Sadiq khan" and ctx.context.pin == 1234:
         ctx.context.authenticated = True
@@ -39,7 +39,7 @@ def authenticate(ctx: RunContextWrapper[Account]) -> str:
     return "Authentication failed. Incorrect name or PIN."
 
 # Tool 2: Check balance
-@function_tool(is_enabled=lambda ctx, agent: ctx.context.authenticated)  # Requires authentication
+@function_tool(is_enabled=lambda ctx, agent: ctx.context.authenticated)
 def check_balance(ctx: RunContextWrapper[Account]) -> str:
     return f"Your balance for account {ctx.context.account_number} is $50,000."
 
